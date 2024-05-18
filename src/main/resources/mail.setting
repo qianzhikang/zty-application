@@ -1,0 +1,10 @@
+
+host = smtp.sina.cn
+
+port = 25
+
+from = a957463620@sina.cn
+
+user = a957463620
+
+pass =
