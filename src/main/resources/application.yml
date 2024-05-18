@@ -1,0 +1,15 @@
+spring:
+  mail:
+    host: smtp.qq.com # 指定邮件服务器的主机名，这里默认是smtp.qq.com，表示使用的是腾讯的SMTP服务器。
+    port: 587 # 456也行
+    username: "你的email" # xxxx@qq.com  这里是发送者
+    password: "授权码"  # 这里就是我前面提到的授权码了
+    properties:   # 其他配置
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory # 指定SSL Socket工厂类，用于创建加密的邮件连接。
+          auto: true # 设置为true表示启用自动连接。
+        starttls: # 配置STARTTLS加密连接
+          enable: true # 设置为true表示启用STARTTLS。
+          required: true # 设置为true表示STARTTLS是必需的，如果不可用，则会抛出异常。
+    default-encoding: UTF-8 # 设置邮件内容的默认编码格式为UTF-8 默认就是UTF-8
