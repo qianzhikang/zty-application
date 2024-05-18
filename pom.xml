@@ -51,6 +51,19 @@
             <artifactId>hutool-json</artifactId>
             <version>5.8.26</version>
         </dependency>
+
+        <!-- hutool定时任务 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-cron</artifactId>
+            <version>5.8.26</version>
+        </dependency>
+
+        <!-- email邮箱-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
 
 

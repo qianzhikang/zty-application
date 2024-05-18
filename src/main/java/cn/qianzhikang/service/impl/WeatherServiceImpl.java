@@ -5,10 +5,12 @@ import cn.hutool.json.JSONUtil;
 import cn.qianzhikang.entity.Location;
 import cn.qianzhikang.entity.WeatherHourlyData;
 import cn.qianzhikang.service.WeatherService;
+import org.springframework.stereotype.Service;
 
 /**
  * @author qianzhikang
  */
+@Service
 public class WeatherServiceImpl implements WeatherService {
     /**
      * 获取24小时天气情况
