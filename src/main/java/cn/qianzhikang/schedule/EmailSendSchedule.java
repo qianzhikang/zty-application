@@ -9,6 +9,6 @@ import cn.hutool.extra.mail.MailUtil;
 public class EmailSendSchedule {
     public void sendEmailSchedule() {
         System.out.println("邮件任务执行发送");
-        MailUtil.send("lmxxmlsq@163.com", "测试", "邮件来自Hutool测试", false);
+//        MailUtil.send("lmxxmlsq@163.com", "测试", "邮件来自Hutool测试", false);
     }
 }
