@@ -1,6 +1,7 @@
 package cn.qianzhikang.controller;
 
 import cn.qianzhikang.RestResponse.RestResult;
+import cn.qianzhikang.entity.Location;
 import cn.qianzhikang.service.CityService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +18,7 @@ public class CityController {
 
     @GetMapping("/search/{cityName}")
     public RestResult getCityInfo(@PathVariable String cityName){
-        cityService.queryCityInfo(cityName);
-        System.out.println(cityName);
-
-        return new RestResult<>().success();
+        Location location = cityService.queryCityInfo(cityName);
+        return new RestResult<>().success(location);
     }
 }

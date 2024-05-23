@@ -1,7 +1,10 @@
 package cn.qianzhikang.service;
 
+import cn.qianzhikang.entity.HourlyData;
 import cn.qianzhikang.entity.Location;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author qianzhikang
@@ -9,6 +12,6 @@ import org.springframework.stereotype.Service;
 
 public interface WeatherService {
 
-   void queryWeatherFor24WithLocation(Location location);
+   List<HourlyData> queryWeatherFor24WithLocation(Location location);
 
 }
