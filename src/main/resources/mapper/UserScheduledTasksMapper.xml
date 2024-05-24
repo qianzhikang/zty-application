@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qianzhikang.mapper.UserScheduledTasksMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qianzhikang.entity.UserScheduledTasks">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="email" column="email" jdbcType="INTEGER"/>
+            <result property="taskType" column="task_type" jdbcType="INTEGER"/>
+            <result property="startTime" column="start_time" jdbcType="TIME"/>
+            <result property="intervalHours" column="interval_hours" jdbcType="INTEGER"/>
+            <result property="nextRunTime" column="next_run_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+            <result property="lastModifiedTime" column="last_modified_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,email,task_type,
+        start_time,interval_hours,next_run_time,
+        status,created_time,last_modified_time
+    </sql>
+</mapper>

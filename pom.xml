@@ -25,10 +25,33 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--注解-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+
+        <!-- mysql驱动 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.31</version>
+        </dependency>
+
+        <!-- mybatis plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.2</version>
         </dependency>
 
         <!-- hutool基础工具 -->
@@ -51,6 +74,8 @@
             <artifactId>hutool-json</artifactId>
             <version>5.8.26</version>
         </dependency>
+
+
 
         <!-- hutool定时任务 -->
         <dependency>

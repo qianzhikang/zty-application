@@ -19,12 +19,12 @@ public class RestResult<T> {
     private String msg;
     private T data;
 
-    RestResult(String msg) {
+   public RestResult(String msg) {
         this.msg = msg;
     }
 
 
-    RestResult(Integer code, String msg) {
+    public RestResult(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }

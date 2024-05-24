@@ -1,0 +1,15 @@
+package cn.qianzhikang.service;
+
+import cn.qianzhikang.entity.UserScheduledTasks;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
+
+/**
+* @author qianzhikang
+* @description 针对表【user_scheduled_tasks】的数据库操作Service
+* @createDate 2024-05-24 11:56:15
+*/
+public interface UserScheduledTasksService extends IService<UserScheduledTasks> {
+    List<UserScheduledTasks> getUserScheduledTasksByEmail(String email);
+}
