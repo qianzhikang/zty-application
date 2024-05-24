@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>zty配置</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-plus"></script>
+    <!-- import axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- import icon -->
+    <script src="//unpkg.com/@element-plus/icons-vue"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* 使得元素的宽度和高度包括 padding 和 border */
+        }
+
+        .header {
+            background-color: black;
+            color: white;
+            height: 60px;
+        }
+
+        .footer {
+            background-color: black;
+            color: white;
+            height: 60px;
+        }
+
+        .main {
+            background-color: #f6f6f6;
+        }
+
+        .input-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+        }
+
+        .edit-area {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 40px;
+        }
+
+        .table-area {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <el-container style="height: 100vh;">
+            <el-header class="header">
+                <div>zty配置</div>
+            </el-header>
+            <el-main style="background-color: #f6f6f6;">
+                <div class="input-area">
+                    <el-input v-model="input" style="max-width: 800px; height: 60px;" placeholder="Please input @Email">
+                        <template #append>
+                            <el-button :icon="Search" @click="onSearch" style="width: 100px;" />
+                        </template>
+                    </el-input>
+                </div>
+                <div class="edit-area">
+                    <div style="width: 85%; display: inline;">
+                        <el-button type="primary">Add</el-button>
+                    </div>
+                </div>
+                <div class="table-area">
+                    <el-table :data="tableData" stripe style="width: 85%;">
+                        <el-table-column prop="value1" label="邮箱" width="200"></el-table-column>
+                        <el-table-column prop="value2" label="任务类型" width="100"></el-table-column>
+                        <el-table-column prop="value3" label="开始时间(每日)" width="150"></el-table-column>
+                        <el-table-column prop="value4" label="间隔时间" width="150"></el-table-column>
+                        <el-table-column prop="value5" label="创建时间" width="200"></el-table-column>
+                        <el-table-column prop="value6" label="上次执行时间" width="200"></el-table-column>
+                        <el-table-column label="状态" width="100">
+                            <el-switch v-model="switchValue"></el-switch>
+                        </el-table-column>
+                        <el-table-column label="删除">
+                            <el-button type="danger">Del</el-button>
+                        </el-table-column>
+
+                    </el-table>
+                </div>
+
+            </el-main>
+            <el-footer class="footer">
+                <div>footer</div>
+            </el-footer>
+        </el-container>
+    </div>
+
+    <script>
+        const tableData = [
+            {
+                value1: 'qzk@qq.com',
+                value2: 1,
+                value3: '9:00:00',
+                value4: '1:00:00',
+                value5: '2024-01-01 00:00:00',
+                value6: '2024-01-01 00:00:00',
+                status: 1,
+            },
+            {
+                value1: 'qzk@qq.com',
+                value2: 1,
+                value3: '9:00:00',
+                value4: '1:00:00',
+                value5: '2024-01-01 00:00:00',
+                value6: '2024-01-01 00:00:00',
+                status: 1,
+            },
+            {
+                value1: 'qzk@qq.com',
+                value2: 1,
+                value3: '9:00:00',
+                value4: '1:00:00',
+                value5: '2024-01-01 00:00:00',
+                value6: '2024-01-01 00:00:00',
+                status: 1,
+            },
+        ]
+        const App = {
+            data() {
+                return {
+                    message: "Hello Element Plus",
+                    input: '',
+                    switchValue: true,
+                    Search: ElementPlusIconsVue.Search,
+                    tableData: tableData
+                };
+            },
+            methods: {
+                onSearch() {
+                    axios.get(`http://localhost:8080/weather/${this.input}`,)
+                    .then(response => {
+                        console.log(response.data)
+                    })
+                }
+            }
+        };
+        const app = Vue.createApp(App);
+        app.use(ElementPlus);
+        app.mount("#app");
+    </script>
+</body>
+
+</html>
