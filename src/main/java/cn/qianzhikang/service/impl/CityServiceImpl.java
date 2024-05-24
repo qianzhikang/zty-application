@@ -8,6 +8,7 @@ import cn.qianzhikang.common.CommonData;
 import cn.qianzhikang.entity.Location;
 import cn.qianzhikang.service.CityService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +27,12 @@ public class CityServiceImpl implements CityService {
     public Location queryCityInfo(String cityName) {
         String URL = CommonData.cityInfoHost + "location=" + cityName + "&key=" + CommonData.key;
         String res = HttpUtil.get(URL);
+        Assert.hasText(res,"接口调用失败");
         JSONObject json = JSONUtil.parseObj(res);
         List<Location> locations = new ArrayList<>();
         List locationObjs = json.get("location", List.class);
+        Assert.notEmpty(locationObjs,"未知地区");
         locationObjs.forEach(item->locations.add(BeanUtil.toBean(item, Location.class)));
-        if (locationObjs.isEmpty()) {
-            return null;
-        }
         return locations.get(0);
     }
 }
