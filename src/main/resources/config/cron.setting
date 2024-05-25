@@ -1,3 +1,0 @@
-# 定时任务匹配值 每15秒执行一次
-[cn.qianzhikang.schedule]
-EmailSendSchedule.sendEmailSchedule = */15 * * * * *

@@ -13,3 +13,8 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+app:
+  constant:
+    # 默认时间容错范围 （单位：秒）
+    default-time-tolerance: 15

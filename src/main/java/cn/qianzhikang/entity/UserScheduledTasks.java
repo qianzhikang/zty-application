@@ -55,7 +55,7 @@ public class UserScheduledTasks implements Serializable {
     private Date nextRunTime;
 
     /**
-     * 
+     * 0禁用，1启用
      */
     private String status;
 
