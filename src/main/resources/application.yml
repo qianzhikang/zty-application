@@ -4,7 +4,8 @@ spring:
     url: jdbc:mysql://www.qianzhikang.cn:3306/zty-database
     username: root
     password: qzk19991007
-
+  jackson:
+    date-format: "yyyy-MM-dd HH:mm:ss"
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml

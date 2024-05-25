@@ -33,6 +33,21 @@ public class UserScheduledTasksServiceImpl extends ServiceImpl<UserScheduledTask
         userScheduledTasksLambdaQueryWrapper.eq(UserScheduledTasks::getEmail,email);
         return userScheduledTasksMapper.selectList(userScheduledTasksLambdaQueryWrapper);
     }
+
+    /**
+     * 更新定时任务状态
+     * @param id
+     * @param status
+     */
+    @Override
+    public void updateStatus(Integer id, String status) {
+        // 根据id更新状态
+        LambdaQueryWrapper<UserScheduledTasks> userScheduledTasksLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userScheduledTasksLambdaQueryWrapper.eq(UserScheduledTasks::getId,id);
+        UserScheduledTasks userScheduledTasks = new UserScheduledTasks();
+        userScheduledTasks.setStatus(status);
+        userScheduledTasksMapper.update(userScheduledTasks,userScheduledTasksLambdaQueryWrapper);
+    }
 }
 
 

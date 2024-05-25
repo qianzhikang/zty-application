@@ -12,4 +12,6 @@ import java.util.List;
 */
 public interface UserScheduledTasksService extends IService<UserScheduledTasks> {
     List<UserScheduledTasks> getUserScheduledTasksByEmail(String email);
+
+    void updateStatus(Integer id, String status);
 }
