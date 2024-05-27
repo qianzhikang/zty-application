@@ -6,6 +6,7 @@ spring:
     password: qzk19991007
   jackson:
     date-format: "yyyy-MM-dd HH:mm:ss"
+    time-zone: Asia/Shanghai
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
