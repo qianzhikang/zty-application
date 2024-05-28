@@ -107,8 +107,12 @@
                     <template #default>
                         <el-form :model="form" :inline="true">
 
-                            <el-form-item prop="email" label="邮箱" label-width="100px">
+                            <el-form-item label="邮箱" label-width="100px">
                                 <el-input v-model="form.email" autocomplete="off" style="width: 250px;"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="地区" label-width="100px">
+                                <el-input v-model="form.cityName" autocomplete="off" style="width: 250px;"></el-input>
                             </el-form-item>
 
                             <el-form-item label="任务类型" label-width="100px">

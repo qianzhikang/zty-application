@@ -1,5 +1,7 @@
 package cn.qianzhikang.service.impl;
 
+import cn.qianzhikang.entity.Location;
+import cn.qianzhikang.service.CityService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.qianzhikang.entity.UserScheduledTasks;
@@ -21,6 +23,9 @@ public class UserScheduledTasksServiceImpl extends ServiceImpl<UserScheduledTask
 
     @Resource
     private UserScheduledTasksMapper userScheduledTasksMapper;
+
+    @Resource
+    private CityService cityService;
 
     /**
      * 根据邮箱查询定时任务
@@ -44,8 +49,22 @@ public class UserScheduledTasksServiceImpl extends ServiceImpl<UserScheduledTask
         // 根据id更新状态
         LambdaQueryWrapper<UserScheduledTasks> userScheduledTasksLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userScheduledTasksLambdaQueryWrapper.eq(UserScheduledTasks::getId,id);
-        UserScheduledTasks userScheduledTasks = UserScheduledTasks.builder().status(status).build();
+        UserScheduledTasks userScheduledTasks = new UserScheduledTasks();
+        userScheduledTasks.setStatus(status);
         userScheduledTasksMapper.update(userScheduledTasks,userScheduledTasksLambdaQueryWrapper);
+    }
+
+    /**
+     * 插入定时任务
+     * @param userScheduledTasks
+     */
+    @Override
+    public void insert(UserScheduledTasks userScheduledTasks) {
+        String cityName = userScheduledTasks.getCityName();
+        Location location = cityService.queryCityInfo(cityName);
+        userScheduledTasks.setLon(location.getLon());
+        userScheduledTasks.setLat(location.getLat());
+        userScheduledTasksMapper.insert(userScheduledTasks);
     }
 }
 

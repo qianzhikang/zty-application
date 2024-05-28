@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @TableName(value ="user_scheduled_tasks")
 @Data
-@Builder
+//@Builder
 public class UserScheduledTasks implements Serializable {
     /**
      * 自增ID
@@ -31,6 +31,17 @@ public class UserScheduledTasks implements Serializable {
     @NotEmpty(message = "邮箱不能为空")
     @Email(message = "邮箱格式不正确")
     private String email;
+
+
+    // 位置
+    @NotEmpty(message = "地区不能为空")
+    private String cityName;
+
+    // 纬度
+    private String lat;
+
+    // 经度
+    private String lon;
 
     /**
      * 任务类型：0-每日任务，1-间隔任务
@@ -63,13 +74,11 @@ public class UserScheduledTasks implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
     /**
      * 记录更新时间
      */
-    @TableField(fill = FieldFill.UPDATE)
     private Date lastModifiedTime;
 
     @TableField(exist = false)

@@ -1,20 +1,25 @@
 package cn.qianzhikang.schedule;
 
 import cn.hutool.extra.mail.MailUtil;
+import cn.qianzhikang.common.EmailTemplate;
+import cn.qianzhikang.entity.HourlyData;
+import cn.qianzhikang.entity.Location;
 import cn.qianzhikang.entity.UserScheduledTasks;
 import cn.qianzhikang.mapper.UserScheduledTasksMapper;
+import cn.qianzhikang.service.WeatherService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 邮件发送定时任务
@@ -24,6 +29,9 @@ public class EmailSendSchedule {
 
     @Resource
     private UserScheduledTasksMapper userScheduledTasksMapper;
+
+    @Resource
+    private WeatherService weatherService;
 
     // 允许的时间误差
     @Value("${app.constant.default-time-tolerance}")
@@ -70,14 +78,38 @@ public class EmailSendSchedule {
                 }
             }
             if (shouldSendEmail) {
-                System.out.println("发送邮件");
-                MailUtil.send("957463620@qq.com", "测试", "邮件来自Hutool测试", false);
+                sendEmail(userScheduledTask);
             }
+        }
+    }
+
+
+    private void sendEmail(UserScheduledTasks userScheduledTask) {
+        // 获取地区位置
+        Location location = new Location();
+        location.setName(userScheduledTask.getCityName());
+        location.setLon(userScheduledTask.getLon());
+        location.setLat(userScheduledTask.getLat());
+        // 查询天气信息
+        List<HourlyData> hourlyData = weatherService.queryWeatherFor24WithLocation(location);
+        Assert.notEmpty(hourlyData, "天气API异常");
+
+        boolean isRain = false;
+        for (HourlyData hourlyDatum : hourlyData) {
+            if (hourlyDatum.getText().contains("雨")) {
+                isRain = true;
+                break;
+            }
+        }
+        if (isRain){
+            System.out.println("发送邮件");
+            MailUtil.send(userScheduledTask.getEmail(), EmailTemplate.SUBJECT, EmailTemplate.CONTEXT, false);
         }
     }
 
     /**
      * 时间转换（不含年月日）
+     *
      * @param date
      * @return
      */
@@ -87,6 +119,7 @@ public class EmailSendSchedule {
 
     /**
      * 时间转换（含年月日）
+     *
      * @param date
      * @return
      */
@@ -96,6 +129,7 @@ public class EmailSendSchedule {
 
     /**
      * 是否在允许误差时间内
+     *
      * @param currentTime
      * @param targetTime
      * @return
@@ -108,6 +142,7 @@ public class EmailSendSchedule {
 
     /**
      * 更新下次运行时间
+     *
      * @param userScheduledTask
      * @param isTimeout
      */
@@ -123,6 +158,9 @@ public class EmailSendSchedule {
                     .plusMinutes(userScheduledTask.getIntervalHours().getMinutes())
                     .plusSeconds(userScheduledTask.getIntervalHours().getSeconds());
         }
-        userScheduledTasksMapper.updateById(UserScheduledTasks.builder().id(userScheduledTask.getId()).nextRunTime(Date.from(nextRunTime.atZone(ZoneId.systemDefault()).toInstant())).build());
+        UserScheduledTasks userScheduledTasks = new UserScheduledTasks();
+        userScheduledTasks.setId(userScheduledTask.getId());
+        userScheduledTasks.setNextRunTime(Date.from(nextRunTime.atZone(ZoneId.systemDefault()).toInstant()));
+        userScheduledTasksMapper.updateById(userScheduledTasks);
     }
 }

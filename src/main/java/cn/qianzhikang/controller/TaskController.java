@@ -25,8 +25,8 @@ public class TaskController {
         return new RestResult<>().success(userScheduledTasksByEmail);
     }
     @PostMapping("post")
-    public RestResult putTask(@Valid @RequestBody UserScheduledTasks userScheduledTasks){
-        userScheduledTasksService.save(userScheduledTasks);
+    public RestResult postTask(@Valid @RequestBody UserScheduledTasks userScheduledTasks){
+        userScheduledTasksService.insert(userScheduledTasks);
         return new RestResult<>().success();
     }
 
