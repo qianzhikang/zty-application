@@ -219,8 +219,7 @@
                 },
                 handleAdd() {
                     this.form.status = 1;
-                    this.form.createdTime = new Date().getTime();
-                    this.form.lastModifiedTime = new Date().getTime();
+                    this.form.nextRunTime = this.form.startTime;
                     axios({
                         method: 'post',
                         url: 'http://localhost:8080/task/post',

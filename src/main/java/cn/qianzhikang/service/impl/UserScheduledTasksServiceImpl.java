@@ -44,8 +44,7 @@ public class UserScheduledTasksServiceImpl extends ServiceImpl<UserScheduledTask
         // 根据id更新状态
         LambdaQueryWrapper<UserScheduledTasks> userScheduledTasksLambdaQueryWrapper = new LambdaQueryWrapper<>();
         userScheduledTasksLambdaQueryWrapper.eq(UserScheduledTasks::getId,id);
-        UserScheduledTasks userScheduledTasks = new UserScheduledTasks();
-        userScheduledTasks.setStatus(status);
+        UserScheduledTasks userScheduledTasks = UserScheduledTasks.builder().status(status).build();
         userScheduledTasksMapper.update(userScheduledTasks,userScheduledTasksLambdaQueryWrapper);
     }
 }

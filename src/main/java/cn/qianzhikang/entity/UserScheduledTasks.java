@@ -1,12 +1,11 @@
 package cn.qianzhikang.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -18,6 +17,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @TableName(value ="user_scheduled_tasks")
 @Data
+@Builder
 public class UserScheduledTasks implements Serializable {
     /**
      * 自增ID
@@ -52,6 +52,7 @@ public class UserScheduledTasks implements Serializable {
     /**
      * 间隔任务使用，计算得到
      */
+    @JsonFormat(pattern = "HH:mm:ss")
     private Date nextRunTime;
 
     /**
@@ -62,11 +63,13 @@ public class UserScheduledTasks implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
     /**
      * 记录更新时间
      */
+    @TableField(fill = FieldFill.UPDATE)
     private Date lastModifiedTime;
 
     @TableField(exist = false)
