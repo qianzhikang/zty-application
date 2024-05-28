@@ -51,14 +51,17 @@ public class EmailSendSchedule {
                     shouldSendEmail = true;
                 }
             } else if (userScheduledTask.getTaskType() == 1) {
-                // 间隔任务
+                /// 间隔任务
+                // 获取下次运行时间
                 LocalTime nextRunTime = convertDateToLocalTime(userScheduledTask.getNextRunTime());
+                // 获取上次执行时间
                 LocalDateTime lastModifiedTime = convertDateToLocalDateTime(userScheduledTask.getLastModifiedTime());
+                // 计算理论下次应当执行的时间
                 LocalDateTime intervalEndTime = lastModifiedTime
                         .plusHours(userScheduledTask.getIntervalHours().getHours())
                         .plusMinutes(userScheduledTask.getIntervalHours().getMinutes())
                         .plusSeconds(userScheduledTask.getIntervalHours().getSeconds());
-
+                // 判断是否在允许的时间误差内 或 已经超时未执行
                 if (isTimeWithinTolerance(currentTime, nextRunTime)
                         || (nextRunTime.isBefore(currentTime) && intervalEndTime.isBefore(LocalDateTime.now()))) {
                     shouldSendEmail = true;
@@ -66,7 +69,6 @@ public class EmailSendSchedule {
 
                 }
             }
-
             if (shouldSendEmail) {
                 System.out.println("发送邮件");
                 MailUtil.send("957463620@qq.com", "测试", "邮件来自Hutool测试", false);
@@ -74,20 +76,41 @@ public class EmailSendSchedule {
         }
     }
 
+    /**
+     * 时间转换（不含年月日）
+     * @param date
+     * @return
+     */
     private LocalTime convertDateToLocalTime(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
     }
 
+    /**
+     * 时间转换（含年月日）
+     * @param date
+     * @return
+     */
     private LocalDateTime convertDateToLocalDateTime(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 
+    /**
+     * 是否在允许误差时间内
+     * @param currentTime
+     * @param targetTime
+     * @return
+     */
     private boolean isTimeWithinTolerance(LocalTime currentTime, LocalTime targetTime) {
         int toleranceSeconds = Math.abs(currentTime.toSecondOfDay() - targetTime.toSecondOfDay());
         return toleranceSeconds < DEFAULT_TIME_TOLERANCE;
     }
 
 
+    /**
+     * 更新下次运行时间
+     * @param userScheduledTask
+     * @param isTimeout
+     */
     private void updateNextRunTime(UserScheduledTasks userScheduledTask, boolean isTimeout) {
         LocalDateTime nextRunTime = convertDateToLocalDateTime(userScheduledTask.getNextRunTime());
         if (isTimeout) {
