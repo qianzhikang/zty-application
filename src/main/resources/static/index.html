@@ -67,7 +67,7 @@
     <div id="app">
         <el-container style="height: 100vh;">
             <el-header class="header">
-                <div>zty配置</div>
+                <div>zty配置-v1.0内测版本</div>
             </el-header>
             <el-main style="background-color: #f6f6f6;">
                 <div class="input-area">
@@ -78,16 +78,17 @@
                     </el-input>
                 </div>
                 <div class="edit-area">
-                    <div style="width: 85%; display: inline;">
+                    <div style="width: 100%; display: inline;">
                         <el-button type="primary" @click="centerDialogVisible = true">添加任务</el-button>
                     </div>
                 </div>
                 <div class="table-area">
-                    <el-table :data="tableData" stripe style="width: 85%;">
+                    <el-table :data="tableData" stripe style="width: 100%;">
                         <el-table-column prop="email" label="邮箱" width="200"></el-table-column>
                         <el-table-column label="任务类型" width="150" :formatter="formatTaskType"></el-table-column>
                         <el-table-column prop="startTime" label="开始时间(每日)" width="150"></el-table-column>
                         <el-table-column prop="intervalHours" label="间隔时间" width="150"></el-table-column>
+                        <el-table-column prop="shutdownTime" label="免打扰时间" width="150"></el-table-column>
                         <el-table-column prop="createdTime" label="创建时间" width="200"></el-table-column>
                         <el-table-column prop="lastModifiedTime" label="上次执行时间" width="200"></el-table-column>
                         <el-table-column label="状态" width="100">
@@ -124,6 +125,10 @@
                             <el-form-item label="开始时间" label-width="100px">
                                 <el-time-picker v-model="form.startTime" placeholder="选择时间" value-format="HH:mm:ss"
                                     style="width: 250px;"></el-time-picker>
+                            </el-form-item>
+                            <el-form-item label="免打扰时间" label-width="100px">
+                                <el-time-picker v-model="form.shutdownTime" placeholder="选择时间" value-format="HH:mm:ss"
+                                                style="width: 250px;"></el-time-picker>
                             </el-form-item>
                             <el-form-item label="间隔时间" label-width="100px">
                                 <el-time-picker v-model="form.intervalHours" placeholder="选择时间"
@@ -174,7 +179,7 @@
                     return result
                 },
                 onSearch(email) {
-                    axios.get(`http://localhost:8080/task/get?email=${email}`,)
+                    axios.get(`http://localhost:8080/task/get?email=${email}`)
                         .then(response => {
                             console.log(response.data)
                             if (response.data.code === 1) {

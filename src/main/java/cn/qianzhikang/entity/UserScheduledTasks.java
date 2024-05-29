@@ -49,10 +49,16 @@ public class UserScheduledTasks implements Serializable {
     private Integer taskType;
 
     /**
-     * 每日任务使用
+     * 开始时间
      */
     @JsonFormat(pattern = "HH:mm:ss")
     private Date startTime;
+
+    /**
+     * 间隔任务结束时间
+     */
+    @JsonFormat(pattern = "HH:mm:ss")
+    private Date shutdownTime;
 
     /**
      * 间隔小时数
