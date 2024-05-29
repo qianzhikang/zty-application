@@ -127,12 +127,11 @@
                                     style="width: 250px;"></el-time-picker>
                             </el-form-item>
                             <el-form-item label="免打扰时间" label-width="100px">
-                                <el-time-picker v-model="form.shutdownTime" placeholder="选择时间" value-format="HH:mm:ss"
+                                <el-time-picker v-model="form.shutdownTime" placeholder="选择时间" value-format="HH:mm:ss" :disabled="isDailyTask"
                                                 style="width: 250px;"></el-time-picker>
                             </el-form-item>
                             <el-form-item label="间隔时间" label-width="100px">
-                                <el-time-picker v-model="form.intervalHours" placeholder="选择时间"
-                                    :disabled-seconds="disabledSeconds" value-format="HH:mm:ss"
+                                <el-time-picker v-model="form.intervalHours" placeholder="选择时间" value-format="HH:mm" :disabled="isDailyTask"
                                     style="width: 250px;"></el-time-picker>
                             </el-form-item>
                         </el-form>
@@ -235,7 +234,6 @@
                         data: this.form
                     }).then(response => {
                         if (response.data.code === 1) {
-                            console.log(this.form.email)
                             this.onSearch(this.form.email)
                         } else {
 
@@ -244,7 +242,18 @@
                     })
                 }
 
+            },
+            computed: {
+                isDailyTask() {
+                    if(this.form.taskType === '0'){
+                        this.form.intervalHours = '00:00:00'
+                        this.form.shutdownTime = '00:00:00'
+                        return true;
+                    }else{
+                        return false;
+                    }
             }
+  }
         };
         const app = Vue.createApp(App);
         app.use(ElementPlus);
