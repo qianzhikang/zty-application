@@ -82,12 +82,6 @@
             <version>5.8.26</version>
         </dependency>
 
-        <!-- hutool定时任务 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-cron</artifactId>
-            <version>5.8.26</version>
-        </dependency>
 
         <!-- 邮件服务 -->
         <dependency>
