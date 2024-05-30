@@ -51,12 +51,12 @@ public class EmailSendSchedule {
 
         for (UserScheduledTasks userScheduledTask : userScheduledTasks) {
             boolean shouldSendEmail = false;
-
+            LocalTime taskStartTime = convertDateToLocalTime(userScheduledTask.getStartTime());
             if (userScheduledTask.getTaskType() == 0) {
                 // 每日任务
-                LocalTime taskStartTime = convertDateToLocalTime(userScheduledTask.getStartTime());
                 if (isTimeWithinTolerance(currentTime, taskStartTime)) {
                     shouldSendEmail = true;
+                    updateLastModifiedTime(userScheduledTask.getId());
                 }
             } else if (userScheduledTask.getTaskType() == 1) {
                 /// 间隔任务
@@ -75,7 +75,7 @@ public class EmailSendSchedule {
                 if (isTimeWithinTolerance(currentTime, nextRunTime)
                         || (nextRunTime.isBefore(currentTime) && intervalEndTime.isBefore(LocalDateTime.now()))) {
                     // 判断是否在免打扰时间之前
-                    if (currentTime.isBefore(shutdownTime)){
+                    if (currentTime.isAfter(taskStartTime) && currentTime.isBefore(shutdownTime)){
                         shouldSendEmail = true;
                     }
                     updateNextRunTime(userScheduledTask, nextRunTime.isBefore(currentTime) && intervalEndTime.isBefore(LocalDateTime.now()));
@@ -172,5 +172,17 @@ public class EmailSendSchedule {
         userScheduledTasks.setId(userScheduledTask.getId());
         userScheduledTasks.setNextRunTime(Date.from(nextRunTime.atZone(ZoneId.systemDefault()).toInstant()));
         userScheduledTasksMapper.updateById(userScheduledTasks);
+    }
+
+    /**
+     * 更新执行时间
+     * @param id
+     */
+    private void updateLastModifiedTime(Integer id) {
+        QueryWrapper<UserScheduledTasks> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id);
+        UserScheduledTasks userScheduledTasks = new UserScheduledTasks();
+        userScheduledTasks.setLastModifiedTime(new Date());
+        userScheduledTasksMapper.update(userScheduledTasks, queryWrapper);
     }
 }
