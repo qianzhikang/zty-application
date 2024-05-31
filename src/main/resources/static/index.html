@@ -131,7 +131,9 @@
                                                 style="width: 250px;"></el-time-picker>
                             </el-form-item>
                             <el-form-item label="间隔时间" label-width="100px">
-                                <el-time-picker v-model="form.intervalHours" placeholder="选择时间" value-format="HH:mm" :disabled="isDailyTask"
+                                <el-time-picker v-model="form.intervalHours" placeholder="选择时间" value-format="HH:mm:ss"
+                                                :disabled-seconds="disabledSeconds"
+                                                :disabled="isDailyTask"
                                     style="width: 250px;"></el-time-picker>
                             </el-form-item>
                         </el-form>
@@ -229,6 +231,7 @@
                 handleAdd() {
                     this.form.status = 1;
                     this.form.nextRunTime = this.form.startTime;
+                    console.log(this.form.intervalHours)
                     axios({
                         method: 'post',
                         url: `${baseUrl}/post`,
@@ -241,6 +244,10 @@
                         }
                         this.centerDialogVisible = false
                     })
+                },
+                disabledSeconds(){
+                    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+                        32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];
                 }
 
             },
