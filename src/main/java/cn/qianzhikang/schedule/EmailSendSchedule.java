@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -78,7 +79,8 @@ public class EmailSendSchedule {
                     if (currentTime.isAfter(taskStartTime) && currentTime.isBefore(shutdownTime)){
                         shouldSendEmail = true;
                     }
-                    updateNextRunTime(userScheduledTask, nextRunTime.isBefore(currentTime) && intervalEndTime.isBefore(LocalDateTime.now()));
+                    // 更新下次运行时间
+                    updateNextRunTime(userScheduledTask,(nextRunTime.isBefore(currentTime) && intervalEndTime.isBefore(LocalDateTime.now())));
 
                 }
             }
@@ -152,25 +154,34 @@ public class EmailSendSchedule {
 
     /**
      * 更新下次运行时间
-     *
+     * 若任务由于某种原因滞后了，未在规定时间执行，则将会把下次运行时间更新为在当前时间之后的下一次执行周期
      * @param userScheduledTask
-     * @param isTimeout
+     * @param
      */
-    private void updateNextRunTime(UserScheduledTasks userScheduledTask, boolean isTimeout) {
-        LocalDateTime nextRunTime = convertDateToLocalDateTime(userScheduledTask.getNextRunTime());
-        if (isTimeout) {
-            nextRunTime = LocalDateTime.now().withSecond(0).withNano(0)
-                    .plusHours(userScheduledTask.getIntervalHours().getHours())
-                    .plusMinutes(userScheduledTask.getIntervalHours().getMinutes())
-                    .plusSeconds(userScheduledTask.getIntervalHours().getSeconds());
-        } else {
-            nextRunTime = nextRunTime.plusHours(userScheduledTask.getIntervalHours().getHours())
-                    .plusMinutes(userScheduledTask.getIntervalHours().getMinutes())
-                    .plusSeconds(userScheduledTask.getIntervalHours().getSeconds());
+    private void updateNextRunTime(UserScheduledTasks userScheduledTask, boolean isLate) {
+        LocalTime nextRunTime = convertDateToLocalTime(userScheduledTask.getNextRunTime());
+        LocalTime startTime = convertDateToLocalTime(userScheduledTask.getStartTime());
+        LocalTime now = LocalTime.now();
+        if (isLate){
+            // 从开始时间重新计算下一个执行周期的时间
+            nextRunTime = startTime;
+            while (!nextRunTime.isAfter(now)){
+                nextRunTime = nextRunTime.plusHours(userScheduledTask.getIntervalHours().getHours())
+                        .plusMinutes(userScheduledTask.getIntervalHours().getMinutes())
+                        .plusSeconds(userScheduledTask.getIntervalHours().getSeconds());
+            }
+        }else {
+            // 更新为下一个执行周期的时间
+            while (!nextRunTime.isAfter(now)) {
+                nextRunTime = nextRunTime.plusHours(userScheduledTask.getIntervalHours().getHours())
+                        .plusMinutes(userScheduledTask.getIntervalHours().getMinutes())
+                        .plusSeconds(userScheduledTask.getIntervalHours().getSeconds());
+            }
         }
         UserScheduledTasks userScheduledTasks = new UserScheduledTasks();
         userScheduledTasks.setId(userScheduledTask.getId());
-        userScheduledTasks.setNextRunTime(Date.from(nextRunTime.atZone(ZoneId.systemDefault()).toInstant()));
+        LocalDateTime localDateTime = LocalDateTime.of(LocalDate.now(), nextRunTime);
+        userScheduledTasks.setNextRunTime(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
         userScheduledTasksMapper.updateById(userScheduledTasks);
     }
 
