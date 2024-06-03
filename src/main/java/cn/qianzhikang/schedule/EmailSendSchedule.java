@@ -163,6 +163,7 @@ public class EmailSendSchedule {
     private void updateNextRunTime(UserScheduledTasks userScheduledTask, boolean isLate) {
         LocalTime nextRunTime = convertDateToLocalTime(userScheduledTask.getNextRunTime());
         LocalTime startTime = convertDateToLocalTime(userScheduledTask.getStartTime());
+        LocalTime shutdownTime = convertDateToLocalTime(userScheduledTask.getShutdownTime());
         LocalTime now = LocalTime.now();
         if (isLate){
             // 从开始时间重新计算下一个执行周期的时间
@@ -179,6 +180,11 @@ public class EmailSendSchedule {
                         .plusMinutes(userScheduledTask.getIntervalHours().getMinutes())
                         .plusSeconds(userScheduledTask.getIntervalHours().getSeconds());
             }
+        }
+        // 检查nextRunTime是否落在免打扰时间段内
+        if (!nextRunTime.isAfter(shutdownTime) && nextRunTime.isBefore(startTime)) {
+            // 调整nextRunTime到开始时间之后的下一个执行周期
+            nextRunTime = startTime;
         }
         UserScheduledTasks userScheduledTasks = new UserScheduledTasks();
         userScheduledTasks.setId(userScheduledTask.getId());
