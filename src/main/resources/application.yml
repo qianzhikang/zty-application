@@ -15,6 +15,9 @@ mybatis-plus:
     cache-enabled: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+logging:
+  config: classpath:log/logback-spring.xml
+
 app:
   constant:
     # 默认时间容错范围 （单位：秒）

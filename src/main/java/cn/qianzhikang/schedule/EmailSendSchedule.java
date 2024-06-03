@@ -8,6 +8,7 @@ import cn.qianzhikang.entity.UserScheduledTasks;
 import cn.qianzhikang.mapper.UserScheduledTasksMapper;
 import cn.qianzhikang.service.WeatherService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 邮件发送定时任务
  */
 @Component
+@Slf4j
 public class EmailSendSchedule {
 
     @Resource
@@ -40,7 +42,7 @@ public class EmailSendSchedule {
 
     @Scheduled(cron = "*/15 * * * * *")
     public void sendEmailSchedule() {
-        System.out.println("查询数据库中");
+        log.info("查询数据库中");
 
         // 查询status为1的记录
         QueryWrapper<UserScheduledTasks> queryWrapper = new QueryWrapper<>();
@@ -101,7 +103,7 @@ public class EmailSendSchedule {
         List<HourlyData> hourlyData = weatherService.queryWeatherFor24WithLocation(location);
         Assert.notEmpty(hourlyData, "天气API异常");
 
-
+        log.info("为"+userScheduledTask.getEmail()+"发送邮件");
         MailUtil.send(userScheduledTask.getEmail(),"接下来一小时的天气情况",hourlyData.get(0).getText(),false);
 
 

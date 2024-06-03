@@ -1,0 +1,109 @@
+<configuration>
+    <!-- 引入spirng boot默认的logback配置文件 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!-- 惟一需要修改的部分,尽量保持简洁 -->
+    <property name="PROJ_NAME" value="zty-api"/>
+    <property name="LOGS_FILE_PATH" value="logs/"/>
+    <!-- 文件输出格式 -->
+    <!--    <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%p] [%t] %c -|: %msg%n" />-->
+
+    <!-- 日志输出格式 -->
+    <!-- info文件 -->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_FILE_PATH}/${PROJ_NAME}.info.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- warn文件 -->
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_FILE_PATH}/${PROJ_NAME}.warn.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- error文件 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_FILE_PATH}/${PROJ_NAME}.error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- 控制台 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--    &lt;!&ndash; 开发环境 &ndash;&gt;-->
+    <!--    <springProfile name="dev">-->
+    <!--        &lt;!&ndash; 专为 Hibernate 定制 &ndash;&gt;-->
+    <!--        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" />-->
+    <!--        <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG" />-->
+    <!--        <logger name="org.hibernate.SQL" level="DEBUG" />-->
+    <!--        <logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />-->
+    <!--        <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />-->
+    <!--        <root level="debug">-->
+    <!--&lt;!&ndash;        <root level="info">&ndash;&gt;-->
+    <!--            <appender-ref ref="CONSOLE" />-->
+    <!--            <appender-ref ref="INFO_FILE" />-->
+    <!--            <appender-ref ref="WARN_FILE" />-->
+    <!--            <appender-ref ref="ERROR_FILE" />-->
+    <!--        </root>-->
+    <!--    </springProfile>-->
+
+    <!--    &lt;!&ndash; 测试环境 &ndash;&gt;-->
+    <!--    <springProfile name="test">-->
+    <!--        <root level="INFO">-->
+    <!--            <appender-ref ref="INFO_FILE" />-->
+    <!--            <appender-ref ref="WARN_FILE" />-->
+    <!--            <appender-ref ref="ERROR_FILE" />-->
+    <!--        </root>-->
+    <!--    </springProfile>-->
+
+    <!--    &lt;!&ndash; 生产环境 &ndash;&gt;-->
+    <!--    <springProfile name="pro">-->
+    <!--        <root level="INFO">-->
+    <!--            <appender-ref ref="INFO_FILE" />-->
+    <!--            <appender-ref ref="WARN_FILE" />-->
+    <!--            <appender-ref ref="ERROR_FILE" />-->
+    <!--        </root>-->
+    <!--    </springProfile>-->
+
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="WARN_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+</configuration>
