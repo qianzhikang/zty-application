@@ -61,16 +61,9 @@ public class UserScheduledTasks implements Serializable {
     private Date shutdownTime;
 
     /**
-     * 间隔小时数
+     * 间隔分钟数
      */
-    @JsonFormat(pattern = "HH:mm:ss")
-    private Date intervalHours;
-
-    /**
-     * 间隔任务使用，计算得到
-     */
-    @JsonFormat(pattern = "HH:mm:ss")
-    private Date nextRunTime;
+    private Integer intervalMinutes;
 
     /**
      * 0禁用，1启用

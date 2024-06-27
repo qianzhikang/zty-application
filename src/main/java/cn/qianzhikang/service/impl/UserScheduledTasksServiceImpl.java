@@ -7,9 +7,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.qianzhikang.entity.UserScheduledTasks;
 import cn.qianzhikang.service.UserScheduledTasksService;
 import cn.qianzhikang.mapper.UserScheduledTasksMapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -65,6 +67,15 @@ public class UserScheduledTasksServiceImpl extends ServiceImpl<UserScheduledTask
         userScheduledTasks.setLon(location.getLon());
         userScheduledTasks.setLat(location.getLat());
         userScheduledTasksMapper.insert(userScheduledTasks);
+    }
+
+    @Override
+    public List<UserScheduledTasks> selectDailyOrIntervalTasks(Integer taskType, LocalDateTime now) {
+        LambdaQueryWrapper<UserScheduledTasks> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserScheduledTasks::getTaskType,taskType);
+        queryWrapper.le(UserScheduledTasks::getStartTime,now);
+        queryWrapper.ge(UserScheduledTasks::getShutdownTime,now);
+        return userScheduledTasksMapper.selectList(queryWrapper);
     }
 }
 

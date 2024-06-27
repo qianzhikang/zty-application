@@ -130,11 +130,8 @@
                                 <el-time-picker v-model="form.shutdownTime" placeholder="选择时间" value-format="HH:mm:ss" :disabled="isDailyTask"
                                                 style="width: 250px;"></el-time-picker>
                             </el-form-item>
-                            <el-form-item label="间隔时间" label-width="100px">
-                                <el-time-picker v-model="form.intervalHours" placeholder="选择时间" value-format="HH:mm:ss"
-                                                :disabled-seconds="disabledSeconds"
-                                                :disabled="isDailyTask"
-                                    style="width: 250px;"></el-time-picker>
+                            <el-form-item label="间隔时间(分钟)" label-width="120px">
+                                <el-input v-model="form.intervalMinutes" autocomplete="off" style="width: 230px;"></el-input>
                             </el-form-item>
                         </el-form>
                     </template>
@@ -230,8 +227,6 @@
                 },
                 handleAdd() {
                     this.form.status = 1;
-                    this.form.nextRunTime = this.form.startTime;
-                    console.log(this.form.intervalHours)
                     axios({
                         method: 'post',
                         url: `${baseUrl}/post`,

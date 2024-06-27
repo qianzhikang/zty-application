@@ -2,7 +2,9 @@ package cn.qianzhikang.service;
 
 import cn.qianzhikang.entity.UserScheduledTasks;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,4 +18,6 @@ public interface UserScheduledTasksService extends IService<UserScheduledTasks> 
     void updateStatus(Integer id, String status);
 
     void insert(UserScheduledTasks userScheduledTasks);
+
+    List<UserScheduledTasks> selectDailyOrIntervalTasks(Integer taskType, LocalDateTime now);
 }
