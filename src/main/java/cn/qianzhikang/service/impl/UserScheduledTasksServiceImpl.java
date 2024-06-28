@@ -70,11 +70,18 @@ public class UserScheduledTasksServiceImpl extends ServiceImpl<UserScheduledTask
     }
 
     @Override
-    public List<UserScheduledTasks> selectDailyOrIntervalTasks(Integer taskType, LocalDateTime now) {
+    public List<UserScheduledTasks> selectIntervalTasks(LocalDateTime now) {
         LambdaQueryWrapper<UserScheduledTasks> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(UserScheduledTasks::getTaskType,taskType);
+        queryWrapper.eq(UserScheduledTasks::getTaskType,1);
         queryWrapper.le(UserScheduledTasks::getStartTime,now);
         queryWrapper.ge(UserScheduledTasks::getShutdownTime,now);
+        return userScheduledTasksMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<UserScheduledTasks> selectDailyTasks() {
+        LambdaQueryWrapper<UserScheduledTasks> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserScheduledTasks::getTaskType,0);
         return userScheduledTasksMapper.selectList(queryWrapper);
     }
 }

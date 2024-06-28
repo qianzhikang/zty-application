@@ -19,5 +19,8 @@ public interface UserScheduledTasksService extends IService<UserScheduledTasks> 
 
     void insert(UserScheduledTasks userScheduledTasks);
 
-    List<UserScheduledTasks> selectDailyOrIntervalTasks(Integer taskType, LocalDateTime now);
+    List<UserScheduledTasks> selectIntervalTasks(LocalDateTime now);
+
+    List<UserScheduledTasks> selectDailyTasks();
+
 }

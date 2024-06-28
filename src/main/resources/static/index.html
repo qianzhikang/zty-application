@@ -87,7 +87,11 @@
                         <el-table-column prop="email" label="邮箱" width="200"></el-table-column>
                         <el-table-column label="任务类型" width="150" :formatter="formatTaskType"></el-table-column>
                         <el-table-column prop="startTime" label="开始时间" width="150"></el-table-column>
-                        <el-table-column prop="intervalHours" label="间隔时间" width="150"></el-table-column>
+                        <el-table-column prop="intervalMinutes" label="间隔时间" width="150">
+                            <template v-slot="{ row }">
+                                {{ row.intervalMinutes }} 分钟
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="shutdownTime" label="免打扰时间" width="150"></el-table-column>
                         <el-table-column prop="createdTime" label="创建时间" width="200"></el-table-column>
                         <el-table-column prop="lastModifiedTime" label="上次执行时间" width="200"></el-table-column>
@@ -131,7 +135,7 @@
                                                 style="width: 250px;"></el-time-picker>
                             </el-form-item>
                             <el-form-item label="间隔时间(分钟)" label-width="120px">
-                                <el-input v-model="form.intervalMinutes" autocomplete="off" style="width: 230px;"></el-input>
+                                <el-input v-model="form.intervalMinutes" autocomplete="off" style="width: 230px;" :disabled="isDailyTask"></el-input>
                             </el-form-item>
                         </el-form>
                     </template>
@@ -249,7 +253,7 @@
             computed: {
                 isDailyTask() {
                     if(this.form.taskType === '0'){
-                        this.form.intervalHours = '00:00:00'
+                        this.form.intervalMinutes = '0'
                         this.form.shutdownTime = '00:00:00'
                         return true;
                     }else{

@@ -1,5 +1,7 @@
 package cn.qianzhikang.schedule;
 
+import cn.hutool.extra.mail.MailUtil;
+import cn.qianzhikang.common.EmailTemplate;
 import cn.qianzhikang.entity.HourlyData;
 import cn.qianzhikang.entity.Location;
 import cn.qianzhikang.entity.UserScheduledTasks;
@@ -44,7 +46,7 @@ public class WeatherSchedule {
         LocalDateTime now = LocalDateTime.now();
         log.info("执行中..当前时间：{}", now);
         // 执行每日任务
-        List<UserScheduledTasks> dailyTasks = userScheduledTasksService.selectDailyOrIntervalTasks(0, now);
+        List<UserScheduledTasks> dailyTasks = userScheduledTasksService.selectDailyTasks();
         for (UserScheduledTasks task : dailyTasks) {
             // 每日任务
             if (isTimeWithinTolerance(LocalTime.now(), convertDateToLocalTime(task.getStartTime()))) {
@@ -54,7 +56,7 @@ public class WeatherSchedule {
         }
 
         // 执行间隔任务
-        List<UserScheduledTasks> intervalTasks = userScheduledTasksService.selectDailyOrIntervalTasks(1, now);
+        List<UserScheduledTasks> intervalTasks = userScheduledTasksService.selectIntervalTasks(now);
         for (UserScheduledTasks task : intervalTasks) {
             if (shouldExecuteIntervalTask(task, now)) {
                 // 执行
@@ -81,20 +83,20 @@ public class WeatherSchedule {
         Assert.notEmpty(hourlyData, "天气API异常");
 
         log.info("为" + userScheduledTask.getEmail() + "发送邮件");
-//        MailUtil.send(userScheduledTask.getEmail(), "接下来一小时的天气情况", hourlyData.get(0).getText(), false);
+        MailUtil.send(userScheduledTask.getEmail(), "接下来一小时的天气情况", hourlyData.get(0).getText(), false);
 
 
-//        boolean isRain = false;
-//        for (HourlyData hourlyDatum : hourlyData) {
-//            if (hourlyDatum.getText().contains("雨")) {
-//                isRain = true;
-//                break;
-//            }
-//        }
-//        if (isRain){
-//            System.out.println("发送邮件");
-//            MailUtil.send(userScheduledTask.getEmail(), EmailTemplate.SUBJECT, EmailTemplate.CONTEXT, false);
-//        }
+        boolean isRain = false;
+        for (HourlyData hourlyDatum : hourlyData) {
+            if (hourlyDatum.getText().contains("雨")) {
+                isRain = true;
+                break;
+            }
+        }
+        if (isRain){
+            System.out.println("发送邮件");
+            MailUtil.send(userScheduledTask.getEmail(), EmailTemplate.SUBJECT, EmailTemplate.CONTEXT, false);
+        }
     }
 
 
