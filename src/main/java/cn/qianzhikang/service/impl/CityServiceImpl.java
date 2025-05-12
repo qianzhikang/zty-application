@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import cn.qianzhikang.common.CommonData;
+import cn.qianzhikang.cache.ConfigCache;
 import cn.qianzhikang.entity.Location;
 import cn.qianzhikang.service.CityService;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import java.util.List;
  */
 @Service
 public class CityServiceImpl implements CityService {
+
     /**
      * 查询城市信息
      * @param cityName 城市名
@@ -25,7 +26,7 @@ public class CityServiceImpl implements CityService {
      */
     @Override
     public Location queryCityInfo(String cityName) {
-        String URL = CommonData.cityInfoHost + "location=" + cityName + "&key=" + CommonData.key;
+        String URL = ConfigCache.get("cityInfoHost") + "location=" + cityName + "&key=" + ConfigCache.get("key");
         String res = HttpUtil.get(URL);
         Assert.hasText(res,"接口调用失败");
         JSONObject json = JSONUtil.parseObj(res);

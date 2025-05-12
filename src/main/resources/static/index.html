@@ -93,8 +93,14 @@
                             </template>
                         </el-table-column>
                         <el-table-column prop="shutdownTime" label="免打扰时间" width="150"></el-table-column>
-                        <el-table-column prop="createdTime" label="创建时间" width="200"></el-table-column>
+<!--                        <el-table-column prop="createdTime" label="创建时间" width="200"></el-table-column>-->
                         <el-table-column prop="lastModifiedTime" label="上次执行时间" width="200"></el-table-column>
+                        <el-table-column label="仅下雨通知" width="100">
+                            <template #default="scope">
+                                <el-switch v-model="scope.row.rainNoticeOnly" :active-value="'1'" :inactive-value="'0'"
+                                    @change="handleNoticeChange(scope.row)" />
+                            </template>
+                        </el-table-column>
                         <el-table-column label="状态" width="100">
                             <template #default="scope">
                                 <el-switch v-model="scope.row.status" :active-value="'1'" :inactive-value="'0'"
@@ -157,6 +163,7 @@
 
     <script>
         const baseUrl = "http://localhost:8080/task";
+        // const baseUrl = "http://www.qianzhikang.cn:8099/task";
         const App = {
             data() {
                 return {
@@ -207,6 +214,27 @@
                             if (index !== -1) {
                                 // 更新该元素的 status 值
                                 this.tableData[index].status = row.status;
+                            }
+                        } else {
+
+                        }
+                    })
+                },
+                handleNoticeChange(row) {
+                    axios({
+                        method: 'put',
+                        url: `${baseUrl}/notice`,
+                        params: {
+                            id: row.id,
+                            rainNoticeOnly: row.rainNoticeOnly
+                        }
+                    }).then(res => {
+                        if (response.data.code === 1) {
+                            // 在 tableData 中找到对应的元素
+                            const index = this.tableData.findIndex(item => item.id === row.id);
+                            if (index !== -1) {
+                                // 更新该元素的 status 值
+                                this.tableData[index].rainNoticeOnly = row.rainNoticeOnly;
                             }
                         } else {
 

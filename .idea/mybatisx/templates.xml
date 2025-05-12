@@ -13,7 +13,7 @@
             <option name="extraClassSuffix" value="" />
             <option name="ignoreFieldPrefix" value="" />
             <option name="ignoreFieldSuffix" value="" />
-            <option name="ignoreTablePrefix" value="" />
+            <option name="ignoreTablePrefix" value="tb_" />
             <option name="ignoreTableSuffix" value="" />
             <option name="moduleName" value="zty-application" />
             <option name="modulePath" value="$PROJECT_DIR$" />
@@ -68,8 +68,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="UserScheduledTasks" />
-                  <option name="tableName" value="user_scheduled_tasks" />
+                  <option name="className" value="AppConfig" />
+                  <option name="tableName" value="app_config" />
                 </TableUIInfo>
               </list>
             </option>
